@@ -79,9 +79,9 @@ if section == "Overview":
     theme.hero(
         "EDA + Predictive Analytics",
         "Mental Health in Tech Survey — Analytics &amp; Insights",
-        "What drives an employee in tech to seek treatment for a mental health condition, and what should "
-        "employers change to remove barriers to that treatment? Built on 1,259 responses from the 2014 "
-        "OSMI survey.",
+        "I dug into 1,259 responses from the 2014 OSMI survey to see what actually lines up with an employee "
+        "seeking treatment for a mental health condition, and what employers could realistically change to "
+        "lower the barriers to that.",
     )
 
     top_feature = "Family History of Mental Illness"
@@ -101,15 +101,16 @@ if section == "Overview":
         theme.content_card_open("Project story")
         st.markdown(
             f"""
-The raw survey has the usual real-world mess: 49 different spellings of `Gender`, ages ranging from
--1,726 to 99,999,999,999, and a couple of null-heavy columns like `state` (40.9% missing) and `comments`
-(87% missing). After cleaning up the age outliers, collapsing gender into 3 consistent groups, and treating
-missing `work_interfere` values as their own category, the data is left with zero unexplained nulls.
+The raw survey had the usual mess you'd expect from a public form: 49 different spellings of `Gender`,
+ages ranging from -1,726 to 99,999,999,999 (someone's keyboard clearly slipped), and a couple of columns
+that were mostly empty, like `state` (40.9% missing) and `comments` (87% missing). Once I fixed the age
+outliers, collapsed gender down into 3 usable groups, and gave missing `work_interfere` values their own
+category instead of dropping them, I was left with a dataset that had zero unexplained nulls.
 
-From there the notebook and this app go through the same three layers: who responded (demographics), what
-workplace policies they deal with (benefits, leave, anonymity, company size), and whether they sought
-treatment for a mental health condition — which is the outcome tied together on the *Correlations &amp;
-Drivers* and *Model Performance* pages.
+From there I worked through it in three layers: who actually responded (demographics), what workplace
+policies they're dealing with (benefits, leave, anonymity, company size), and whether they sought treatment
+for a mental health condition — which ties everything together on the *Correlations &amp; Drivers* and
+*Model Performance* pages.
             """
         )
         theme.content_card_close()
@@ -117,11 +118,11 @@ Drivers* and *Model Performance* pages.
         theme.content_card_open("Key findings")
         st.markdown(
             """
-<div class="finding-item"><b>Family history</b> and <b>work interference</b> are, by a wide margin, the two strongest predictors of treatment-seeking — well ahead of country, gender, or company size.</div>
-<div class="finding-item">Structural workplace factors — <b>care options awareness</b>, <b>anonymity</b>, and <b>ease of leave</b> — correlate with treatment-seeking more than company size does.</div>
-<div class="finding-item"><b>Male respondents</b> (79% of the sample) seek treatment at a meaningfully lower rate than Female/Other respondents.</div>
-<div class="finding-item">About a third of respondents don't know what mental health benefits or care options their employer offers.</div>
-<div class="finding-item"><b>Age</b> and <b>remote work</b> show almost no relationship with treatment-seeking in this dataset.</div>
+<div class="finding-item"><b>Family history</b> and <b>work interference</b> turned out to be the two strongest predictors of treatment-seeking, by a wide margin — well ahead of country, gender, or company size.</div>
+<div class="finding-item">Structural stuff like <b>care options awareness</b>, <b>anonymity</b>, and <b>ease of leave</b> correlates with treatment-seeking more than company size does.</div>
+<div class="finding-item"><b>Male respondents</b> (79% of the sample) seek treatment at a noticeably lower rate than Female or Other respondents.</div>
+<div class="finding-item">About a third of respondents just don't know what mental health benefits or care options their employer offers.</div>
+<div class="finding-item"><b>Age</b> and <b>remote work</b> barely move the needle on treatment-seeking in this dataset.</div>
             """,
             unsafe_allow_html=True,
         )
@@ -130,7 +131,7 @@ Drivers* and *Model Performance* pages.
 # ============================================================ Explore & Segment
 elif section == "Explore & Segment":
     st.markdown("## Explore &amp; Segment")
-    st.caption("Filter the sample and look at demographic and workplace patterns.")
+    st.caption("Slice the sample by demographics and workplace setup and see how the patterns shift.")
 
     fc1, fc2, fc3, fc4 = st.columns(4)
     gender_sel = fc1.multiselect("Gender", ["Male", "Female", "Other"], default=["Male", "Female", "Other"])
@@ -207,7 +208,7 @@ elif section == "Explore & Segment":
 # ============================================================ Correlations & Drivers
 elif section == "Correlations & Drivers":
     st.markdown("## Correlations &amp; Drivers")
-    st.caption("How workplace and demographic factors relate to each other and to the treatment outcome.")
+    st.caption("How the workplace and demographic factors relate to each other, and to the treatment outcome.")
 
     enc = encode_for_correlation(df)
     corr = enc.corr()
@@ -299,7 +300,7 @@ elif section == "Correlations & Drivers":
 # ============================================================ Model Performance
 elif section == "Model Performance":
     st.markdown("## Model Performance")
-    st.caption(f"Two classifiers trained on 18 cleaned features to predict `treatment`. Best model: **{best_model_name}**.")
+    st.caption(f"I trained two classifiers on 18 cleaned features to predict `treatment` — {best_model_name} came out on top.")
 
     theme.kpi_grid([
         ("Accuracy", f"{best.accuracy * 100:.1f}%", best_model_name),
@@ -347,8 +348,8 @@ elif section == "Model Performance":
 elif section == "Response Timeline":
     st.markdown("## Response Timeline")
     st.caption(
-        "This is one 2014 OSMI survey wave, not a separate 2016 dataset — but responses trickled in "
-        "from August 2014 through February 2016. This page looks at that collection timeline."
+        "Just to be clear, this is one 2014 OSMI survey wave, not a separate 2016 dataset. Responses just "
+        "kept trickling in from August 2014 through February 2016, and this page looks at that timeline."
     )
 
     tdf = df.copy()
@@ -403,8 +404,8 @@ elif section == "Response Timeline":
 
     st.caption(
         f"96% of responses ({int(tdf['window'].eq('Launch window (Aug–Sep 2014)').sum())} of {len(tdf)}) came in "
-        "during the first six weeks, which is normal for a survey link shared once and passed around rather than "
-        "a sustained, multi-year collection effort."
+        "during the first six weeks. That's pretty typical for a survey link that gets shared once and passed "
+        "around, rather than something collected steadily over a couple of years."
     )
 
 # ============================================================ Recommendations & About
@@ -414,11 +415,11 @@ elif section == "Recommendations & About":
     theme.content_card_open("What should an employer do with this?")
     st.markdown(
         """
-1. **Communicate existing benefits clearly and repeatedly.** A third of respondents don't know whether benefits or care options exist — probably the cheapest fix available.
-2. **Simplify and clarify medical leave policy.** A large "don't know" group around leave difficulty suggests the ambiguity itself is a barrier.
-3. **Target awareness campaigns at male employees specifically.** Male respondents (79% of the sample) show a meaningfully lower treatment-seeking rate.
-4. **Don't wait for scale.** Company size barely moves treatment-seeking — smaller companies shouldn't deprioritize mental health support.
-5. **Set realistic expectations for policy impact.** The two strongest predictors (family history, work interference) are outside an employer's direct control — benefits and communication help, but are only part of the picture.
+1. **Communicate the benefits you already have.** A third of respondents don't even know whether benefits or care options exist — probably the cheapest fix on this list.
+2. **Make the leave policy less confusing.** A big "don't know" group around leave difficulty suggests the ambiguity itself is quietly stopping people from using it.
+3. **Aim awareness efforts at male employees specifically.** Male respondents (79% of the sample) seek treatment at a noticeably lower rate than everyone else.
+4. **Don't wait until you're bigger.** Company size barely affects treatment-seeking, so smaller companies shouldn't put mental health support on the back burner.
+5. **Keep expectations realistic.** The two strongest predictors (family history, work interference) are outside an employer's control. Benefits and communication genuinely help, but they're one part of the picture, not a fix on their own.
         """
     )
     theme.content_card_close()
@@ -428,9 +429,9 @@ elif section == "Recommendations & About":
         theme.content_card_open("Methodology & tech stack")
         st.markdown(
             """
-- **Data cleaning:** invalid `Age` outliers corrected, 49 raw `Gender` values standardized into 3 categories, missing `work_interfere` treated as its own category.
-- **EDA:** 20+ charts across univariate, bivariate, and multivariate views (see the notebook).
-- **Modeling:** Logistic Regression + Random Forest, evaluated by ROC-AUC, precision, recall, and F1 on a held-out 25% test split.
+- **Data cleaning:** fixed the invalid `Age` outliers, standardized 49 raw `Gender` values into 3 categories, and gave missing `work_interfere` its own category instead of dropping it.
+- **EDA:** 20 charts across univariate, bivariate, and multivariate views — the notebook has the full write-up on each one.
+- **Modeling:** Logistic Regression and Random Forest, compared on ROC-AUC, precision, recall, and F1 over a held-out 25% test split.
 - **Stack:** pandas, scikit-learn, Plotly, Streamlit.
             """
         )
@@ -444,9 +445,9 @@ elif section == "Recommendations & About":
         theme.content_card_open("About")
         st.markdown(
             """
-Built by **Shyam Jagani** as a data analytics internship project, working through the 2014 OSMI Mental
-Health in Tech Survey end to end — cleaning, EDA, and a couple of classifiers to check which factors
-actually matter.
+I put this together as a data analytics internship project, working through the 2014 OSMI Mental Health
+in Tech Survey end to end — cleaning it up, running the EDA, and training a couple of classifiers to see
+which factors actually mattered.
 
 [LinkedIn](https://linkedin.com/in/shyam-jagani-356535141) · Dataset © Open Sourcing Mental Illness (OSMI),
 used here for educational/portfolio purposes.
