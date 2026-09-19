@@ -187,7 +187,7 @@ elif section == "Explore & Segment":
             bubble, x="avg_age", y="treatment_rate", size="count", color="treatment_rate",
             text="country_grouped", size_max=55, color_continuous_scale=theme.SEQUENTIAL_BLUE,
         )
-        fig.update_traces(textposition="top center", marker=dict(line=dict(width=1, color="rgba(15,23,42,0.25)")))
+        fig.update_traces(textposition="top center", marker=dict(line=dict(width=1, color="rgba(21,101,52,0.3)")))
         fig.update_layout(coloraxis_showscale=False)
         fig.update_xaxes(title="Average Age")
         fig.update_yaxes(title="Treatment Rate (%)")
@@ -240,9 +240,9 @@ elif section == "Correlations & Drivers":
             fig.add_trace(go.Scatterpolar(r=sub["score"], theta=factors, fill="toself", name=f"Sought treatment: {outcome}", line_color=theme.YES_NO[outcome], opacity=0.75))
         fig.update_layout(
             polar=dict(
-                bgcolor="rgba(15,23,42,0.02)",
-                radialaxis=dict(visible=True, range=[0, 100], color=theme.TEXT_MUTED, gridcolor="rgba(15,23,42,0.08)"),
-                angularaxis=dict(color=theme.TEXT_SECONDARY, gridcolor="rgba(15,23,42,0.08)"),
+                bgcolor="rgba(21,101,52,0.02)",
+                radialaxis=dict(visible=True, range=[0, 100], color=theme.TEXT_MUTED, gridcolor="rgba(21,101,52,0.1)"),
+                angularaxis=dict(color=theme.TEXT_SECONDARY, gridcolor="rgba(21,101,52,0.1)"),
             ),
         )
         fig.update_layout(**theme.base_layout(height=460, title="Workplace Support Index by Treatment Status (Radar)"))
@@ -277,7 +277,7 @@ elif section == "Correlations & Drivers":
         node_colors = [theme.CAT[0], theme.CAT[1]] + [theme.CAT[2], theme.CAT[3], theme.CAT[5]] + [theme.CAT[0], theme.CAT[1]]
         fig = go.Figure(go.Sankey(
             node=dict(label=all_nodes, color=node_colors, pad=18, thickness=16, line=dict(color="rgba(0,0,0,0)")),
-            link=dict(source=src, target=tgt, value=val, color="rgba(15,23,42,0.08)"),
+            link=dict(source=src, target=tgt, value=val, color="rgba(21,101,52,0.1)"),
         ))
         fig.update_layout(**theme.base_layout(height=460, title="Family History → Work Interference → Treatment (Sankey)"))
         st.plotly_chart(fig, use_container_width=True)
