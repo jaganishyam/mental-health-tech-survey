@@ -25,23 +25,23 @@ best = model_results[best_model_name]
 
 # --- sidebar: just branding / dataset info, navigation lives on the main page ---
 st.sidebar.markdown(
-    """
+    f"""
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
         <span style="font-size:1.4rem;">🎗️</span>
-        <span style="font-size:1.05rem;font-weight:700;color:#f1f5f9;">Mental Health in Tech Survey</span>
+        <span style="font-size:1.05rem;font-weight:700;color:{theme.TEXT_PRIMARY};">Mental Health in Tech Survey</span>
     </div>
-    <div style="color:#657089;font-size:0.82rem;margin-bottom:18px;">OSMI Survey 2014 - EDA project</div>
+    <div style="color:{theme.TEXT_MUTED};font-size:0.82rem;margin-bottom:18px;">OSMI Survey 2014 - EDA project</div>
     """,
     unsafe_allow_html=True,
 )
 st.sidebar.markdown(
     f"""
-    <div style="color:#9aa5b8;font-size:0.82rem;line-height:1.6;">
+    <div style="color:{theme.TEXT_SECONDARY};font-size:0.82rem;line-height:1.6;">
     {len(df):,} responses. Timestamps run from Aug 2014 to Feb 2016
     (see the Response Timeline page).
     </div>
-    <div style="margin-top:14px;color:#657089;font-size:0.8rem;">
-    Built by <b style="color:#9aa5b8;">Shyam Jagani</b> for a data analytics internship.
+    <div style="margin-top:14px;color:{theme.TEXT_MUTED};font-size:0.8rem;">
+    Built by <b style="color:{theme.TEXT_SECONDARY};">Shyam Jagani</b> for a data analytics internship.
     </div>
     """,
     unsafe_allow_html=True,
@@ -187,7 +187,7 @@ elif section == "Explore & Segment":
             bubble, x="avg_age", y="treatment_rate", size="count", color="treatment_rate",
             text="country_grouped", size_max=55, color_continuous_scale=theme.SEQUENTIAL_BLUE,
         )
-        fig.update_traces(textposition="top center", marker=dict(line=dict(width=1, color="rgba(255,255,255,0.25)")))
+        fig.update_traces(textposition="top center", marker=dict(line=dict(width=1, color="rgba(15,23,42,0.25)")))
         fig.update_layout(coloraxis_showscale=False)
         fig.update_xaxes(title="Average Age")
         fig.update_yaxes(title="Treatment Rate (%)")
@@ -240,9 +240,9 @@ elif section == "Correlations & Drivers":
             fig.add_trace(go.Scatterpolar(r=sub["score"], theta=factors, fill="toself", name=f"Sought treatment: {outcome}", line_color=theme.YES_NO[outcome], opacity=0.75))
         fig.update_layout(
             polar=dict(
-                bgcolor="rgba(255,255,255,0.02)",
-                radialaxis=dict(visible=True, range=[0, 100], color=theme.TEXT_MUTED, gridcolor="rgba(255,255,255,0.08)"),
-                angularaxis=dict(color=theme.TEXT_SECONDARY, gridcolor="rgba(255,255,255,0.08)"),
+                bgcolor="rgba(15,23,42,0.02)",
+                radialaxis=dict(visible=True, range=[0, 100], color=theme.TEXT_MUTED, gridcolor="rgba(15,23,42,0.08)"),
+                angularaxis=dict(color=theme.TEXT_SECONDARY, gridcolor="rgba(15,23,42,0.08)"),
             ),
         )
         fig.update_layout(**theme.base_layout(height=460, title="Workplace Support Index by Treatment Status (Radar)"))
@@ -277,7 +277,7 @@ elif section == "Correlations & Drivers":
         node_colors = [theme.CAT[0], theme.CAT[1]] + [theme.CAT[2], theme.CAT[3], theme.CAT[5]] + [theme.CAT[0], theme.CAT[1]]
         fig = go.Figure(go.Sankey(
             node=dict(label=all_nodes, color=node_colors, pad=18, thickness=16, line=dict(color="rgba(0,0,0,0)")),
-            link=dict(source=src, target=tgt, value=val, color="rgba(255,255,255,0.10)"),
+            link=dict(source=src, target=tgt, value=val, color="rgba(15,23,42,0.08)"),
         ))
         fig.update_layout(**theme.base_layout(height=460, title="Family History → Work Interference → Treatment (Sankey)"))
         st.plotly_chart(fig, use_container_width=True)
@@ -363,7 +363,7 @@ elif section == "Response Timeline":
     fig = go.Figure(
         data=[go.Scatter(
             x=monthly["month"][:1], y=monthly["cumulative"][:1], mode="lines+markers",
-            line=dict(color=theme.ACCENT_GREEN_LIGHT, width=3), fill="tozeroy", fillcolor="rgba(34,197,94,0.15)",
+            line=dict(color=theme.ACCENT_GREEN, width=3), fill="tozeroy", fillcolor="rgba(22,163,74,0.12)",
         )],
         frames=frames,
     )
