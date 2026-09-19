@@ -96,13 +96,22 @@ def inject_css():
         .hero {{
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, #dff4e6 0%, #eafaf1 55%, #e3f6ea 100%);
+            background: linear-gradient(120deg, #dff4e6, #eafaf1, #cdedd9, #e3f6ea, #dff4e6);
+            background-size: 300% 300%;
             border: 1px solid rgba(21,128,61,0.25);
             border-radius: 18px;
             padding: 34px 40px;
             margin-bottom: 22px;
-            animation: fadeInUp 0.6s ease both;
+            animation: fadeInUp 0.6s ease both, heroGradientShift 14s ease-in-out infinite;
             box-shadow: 0 10px 30px -18px rgba(21,128,61,0.4);
+        }}
+        @keyframes heroGradientShift {{
+            0% {{ background-position: 0% 50%; }}
+            50% {{ background-position: 100% 50%; }}
+            100% {{ background-position: 0% 50%; }}
+        }}
+        @media (prefers-reduced-motion: reduce) {{
+            .hero {{ animation: none; }}
         }}
         .hero::after {{
             content: "";
@@ -194,21 +203,51 @@ def inject_css():
         footer {{visibility: hidden;}}
         div[data-testid="stMetricValue"] {{ color: {TEXT_PRIMARY}; }}
 
-        /* nav bar buttons on the main page */
-        div[data-testid="column"] button[kind="primary"] {{
-            background: linear-gradient(90deg, {ACCENT_GREEN_DARK}, {ACCENT_GREEN});
-            border: none;
-            color: #ffffff;
-            font-weight: 700;
+        /* nav bar buttons on the main page. targeting button[kind=...]
+        directly rather than scoping through the column wrapper - streamlit
+        has renamed that wrapper's testid before (column -> stColumn) and
+        a scoped selector silently matches nothing when that happens, which
+        is exactly what let the plain "p, li, span" rule above win out over
+        the button's own text color. also resets the browser's default blue
+        focus ring, which otherwise sits on whichever tab was clicked last. */
+        button[kind="primary"] {{
+            background: linear-gradient(90deg, {ACCENT_GREEN_DARK}, {ACCENT_GREEN}) !important;
+            border: none !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
         }}
-        div[data-testid="column"] button[kind="secondary"] {{
-            background: {CARD_BG};
-            border: 1px solid {CARD_BORDER};
-            color: {TEXT_SECONDARY};
+        button[kind="primary"] p,
+        button[kind="primary"] span,
+        button[kind="primary"] div {{
+            color: #ffffff !important;
         }}
-        div[data-testid="column"] button[kind="secondary"]:hover {{
-            border-color: rgba(22,163,74,0.45);
-            color: {ACCENT_GREEN_DARK};
+        button[kind="secondary"] {{
+            background: {CARD_BG} !important;
+            border: 1px solid {CARD_BORDER} !important;
+            color: {TEXT_SECONDARY} !important;
+        }}
+        button[kind="secondary"] p,
+        button[kind="secondary"] span,
+        button[kind="secondary"] div {{
+            color: {TEXT_SECONDARY} !important;
+        }}
+        button[kind="secondary"]:hover {{
+            border-color: rgba(22,163,74,0.45) !important;
+            color: {ACCENT_GREEN_DARK} !important;
+        }}
+        button[kind="secondary"]:hover p,
+        button[kind="secondary"]:hover span,
+        button[kind="secondary"]:hover div {{
+            color: {ACCENT_GREEN_DARK} !important;
+        }}
+        button[kind="primary"]:focus,
+        button[kind="primary"]:focus-visible,
+        button[kind="primary"]:active,
+        button[kind="secondary"]:focus,
+        button[kind="secondary"]:focus-visible,
+        button[kind="secondary"]:active {{
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(22,163,74,0.3) !important;
         }}
         </style>
         """,
